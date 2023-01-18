@@ -1,0 +1,18 @@
+.button-bar {
+    display: flex;
+    overflow-x: scroll;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.activated {
+    --background: #606060;
+    --color: #fff;
+}
+
+.inactive {
+    --background: #edefef;
+    --color: var(--ion-color-primary);
+}

@@ -1,20 +1,19 @@
 <ion-tabs>
+  <ion-tab-bar slot="top">
+    <ion-tab-button tab="popular" routerLinkActive="router-link-active" #popular>
+      <ion-icon [name]="popular.selected ? 'star' : 'star-outline'"></ion-icon>
+      <ion-label>Popular</ion-label>
+    </ion-tab-button>
+    
 
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="tab1">
-      <ion-icon name="triangle"></ion-icon>
-      <ion-label>Tab 1</ion-label>
+    <ion-tab-button tab="trending" #tab2>
+      <ion-icon [name]="tab2.selected ? 'trending-up' : 'trending-up-outline'"></ion-icon>
+      <ion-label>Trending</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="tab2">
-      <ion-icon name="ellipse"></ion-icon>
-      <ion-label>Tab 2</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="tab3">
-      <ion-icon name="square"></ion-icon>
-      <ion-label>Tab 3</ion-label>
+    <ion-tab-button tab="favorite" #tab3>
+      <ion-icon [name]="tab3.selected ? 'flag' : 'flag-outline'"></ion-icon>
+      <ion-label>Favorite</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
-
 </ion-tabs>

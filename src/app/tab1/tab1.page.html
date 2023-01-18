@@ -1,17 +1,54 @@
 <ion-header [translucent]="true">
+  <app-profilebar></app-profilebar>
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-button class="ion-margin-start" slot="start">
+      <ion-icon style="font-size: 48px" name="play-circle"></ion-icon>
+    </ion-button>
+    <!-- <ion-title>
+      Popular Movies
+    </ion-title> -->
+    <div class="button-bar" slot="end">
+        <ion-button 
+        *ngFor="let genre of genreContainer; let i = index"
+        (click)="selectSegment(i, genre)"
+        [ngClass]="{'activate': genre.selected, 'inactive': !genre.selected}"
+        shape="round"
+        size="small">{{ genre.name }}
+        </ion-button>
+    </div>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  
+  <ion-list>
+    <app-slider [sliderInputValue] = "sliderContainer"></app-slider>
+    <ion-list>
+      <ion-item>
+        <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
+      </ion-item>
+      <ion-item>
+        <ion-label>Discover Movies By Genre</ion-label>
+        <ion-icon style="font-size: 24px;" name="filter"></ion-icon>
+  
+        <ion-select placeholder="Select Genre Options" [value]="selectedGenreValue" (ionChange)=genreSelectionChanged($event) >
+          <ion-select-option *ngFor="let item of genreContainer" value="{{ item.id }}">{{ item.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <app-genre *ngIf="isGenreSelected" [genreMoviesContainer]="genreMoviesContainer" [genre]="selectedGenre"></app-genre>
+    <ion-grid fixed="true">
+        <ion-item>
+          <ion-label style="font-size: 18px;">Popular Movies</ion-label>
+        </ion-item>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+        <ion-row>
+          <ion-col *ngFor="let item of popularContainer" size-lg="2" size-md="4" size-sm="6" size-xs="6">
+            <app-card [id]="item.id" [title]="item.title" [image]="item.image" [model]="item.modelItem" (cardEventTrigger)="cardEventListener($event)"></app-card>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
+    
+  </ion-list>
 </ion-content>

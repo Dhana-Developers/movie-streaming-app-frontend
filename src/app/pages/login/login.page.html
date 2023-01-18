@@ -1,0 +1,39 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <div class="flex-center">
+    <form [formGroup]="form">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title color="primary">Login</ion-card-title>
+             
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="text" placeholder="example@email.com" formControlName="username"></ion-input>
+            
+          </ion-item>
+          <ion-label color="danger" *ngIf="form.get('username').touched && form.get('username').errors?.required">Username required</ion-label>
+          <!-- <ion-label color="danger" *ngIf="form.get('email').touched && form.get('email').errors?.required">Email is mandatory</ion-label> -->
+          
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" placeholder="Enter text" formControlName="password"></ion-input>
+            
+          </ion-item>
+          
+          <ion-button color="dark" size="full" fill="clear" [disabled]="form.valid">
+            forgot password?
+          </ion-button>
+          <ion-button color="success" size="full" (click)="login()" [disabled]="!form.valid">Login</ion-button>
+          <ion-button color="success" size="full" fill="clear" (click)="register()">Sign up</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </form>
+  </div>
+</ion-content>
