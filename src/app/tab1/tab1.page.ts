@@ -7,6 +7,7 @@ import { AppState } from '../store/AppState';
 import { Store } from '@ngrx/store';
 import { NavigationEnd } from '@angular/router';
 import { LoginState } from '../store/login/LoginState';
+import { StorageService } from '../projects/api/service/storage.service';
 
 @Component({
   selector: 'app-tab1',
@@ -14,7 +15,7 @@ import { LoginState } from '../store/login/LoginState';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit{
-  
+  user!: any;
 
   modelType = 'movie';
   sliderContainer:any = [];
@@ -32,23 +33,24 @@ export class Tab1Page implements OnInit{
 
   constructor(private service: ThemoviedbService,
     private store: Store<AppState>,
+    private storage: StorageService
     ) {
-    this.genreContainer.map((id=10) => ({
+    this.genreContainer.map(() => ({
       selected: true,
     }));
     
   }
   
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.initializeSliderContainer();
     this.initializeGenreContainer();
     this.initializeContainer();
     this.store.dispatch(hide());
-    this.store.select('login').subscribe(loginstate => {
-      console.log(loginstate);
-      this.loginState = loginstate;
-    });
+    await this.storage.get('user').then(resp => {
+      console.log(resp);
+      this.user = resp;
+    })
   }
   
 

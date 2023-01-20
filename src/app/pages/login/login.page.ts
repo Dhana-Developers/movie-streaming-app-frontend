@@ -11,6 +11,7 @@ import { LoginState } from 'src/app/store/login/LoginState';
 import { AuthService } from 'src/app/projects/api/service/authservice.service';
 import { User } from 'src/app/model/user/User';
 import { ToastController } from '@ionic/angular';
+import { StorageService } from 'src/app/projects/api/service/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -20,28 +21,30 @@ import { ToastController } from '@ionic/angular';
 export class LoginPage implements OnInit, OnDestroy {
   form!: any;
   loginStateSubscription!: Subscription;
-  loginSate!: LoginState;
+  loginSate!: boolean;
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private store: Store<AppState>,
     private auth: AuthService,
+    private storage: StorageService,
     private toastCtrl: ToastController) {
     this.form = FormGroup;
    }
 
-  ngOnInit() {
-    this.store.dispatch(hide());
+  async ngOnInit() {
     this.form = new LoginPageForm(this.formBuilder).createForm()
     //this.store.dispatch(logIn())
-    this.store.select('login').subscribe(loginstate => {
-      this.loginSate = loginstate;
-      
-      //this.onIsLogginIn(loginstate);
-      this.onIsLoggedIn(loginstate);
-      this.onError(loginstate);
-      //this.toggleLoading(loginstate);
+    await this.storage.get('isLoggedIn').then(value => {
+      console.log(value);
+      if (value) {
+        this.onIsLoggedIn();
+      }else {
+        this.store.dispatch(hide());
+      }
     })
+      
+    
   }
 
   ngOnDestroy(): void {
@@ -58,39 +61,39 @@ export class LoginPage implements OnInit, OnDestroy {
     }
   }
 
-  private onIsLoggedIn(loginState: LoginState) {
-    if (loginState.isLoggedIn) {
-      this.router.navigate(['tabs', 'popular'])
-    }
+  private onIsLoggedIn() {
+    this.router.navigate(['tabs', 'popular'])
   }
 
-   async login() {
+  async login() {
     this.store.dispatch(show());
     let user = {
       'username': this.form.get('username').value,
       'password': this.form.get('password').value
     }
     
-      await this.auth.signin(user).subscribe((resp) => {
-        console.log(user);
-        
-        console.log(resp);
-        if (resp.code == 1) {
-          let error = {message: resp.msg};
-          this.store.dispatch(loginFail({error}));
-          this.store.dispatch(hide());
-        } else {
-          const user = new User();
-          user.username = resp.username;
-          user.id = resp.id;
-          user.subscription = resp.subscription;
-          user.usertype = resp.usertype;
-          this.store.dispatch(loginSucccess({user}));
-          // this.store.dispatch(hide());
-          this.router.navigate(['tabs', 'popular']);
-        }
-        
-      });
+    await this.auth.signin(user).subscribe((resp) => {
+      // console.log(user);
+      
+      console.log(resp);
+      if (resp.code == 1) {
+        let error = {message: resp.msg};
+        this.store.dispatch(loginFail({error}));
+        this.store.dispatch(hide());
+      } else {
+        const user = new User();
+        user.username = resp.username;
+        user.id = resp.id;
+        user.subscription = resp.subscription;
+        user.usertype = resp.usertype;
+        // this.store.dispatch(loginSucccess({user}));
+        this.storage.set('user', user);
+        this.storage.set('isLoggedIn', true);
+        // this.store.dispatch(hide());
+        this.router.navigate(['tabs', 'popular']);
+      }
+      
+    });
     
   }
 

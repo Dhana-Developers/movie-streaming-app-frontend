@@ -24,6 +24,7 @@ const reducer = createReducer(initialState,
         }
     }),
     on(loginSucccess, (currentState, action) => {
+        
         return {
             ...currentState,
             user: action.user,

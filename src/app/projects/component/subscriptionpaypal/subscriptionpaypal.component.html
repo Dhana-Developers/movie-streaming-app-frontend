@@ -1,0 +1,34 @@
+<div class="flex-center">
+  <ion-card>
+    <ion-card-title size="large"></ion-card-title>
+    <ion-card-content>
+      <ion-title>Select plan</ion-title>
+      <ion-item>
+        <ion-checkbox slot="start"></ion-checkbox>
+        <div>
+          <h1>Weekly plan</h1>
+
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox slot="start"></ion-checkbox>
+        <div>
+          <h1>Monthly plan</h1>
+          
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox slot="start"></ion-checkbox>
+        <div>
+          <h1>Monthly plan</h1>
+          
+        </div>
+      </ion-item>
+      <wm-paypal [style.width.px]="width" [height]="height" [layout]="layout" [shape]="shape" [color]="color"
+        [label]="label" [tagline]="true" [disabled]="false" [request]="order"
+        (cancel)="onCancel($event)" (error)="onError($event)" #paypal enableStandardCardFields></wm-paypal>
+    </ion-card-content>
+    
+
+  </ion-card>
+</div>

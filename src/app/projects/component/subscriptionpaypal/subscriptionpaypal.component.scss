@@ -1,0 +1,13 @@
+div {
+    display: flex;
+}
+ion-card {
+    align-items: center;
+    width: 40%;
+    height: auto;
+    align-self: center;
+
+    ion-title {
+        font-size: 50px;
+    }
+}
