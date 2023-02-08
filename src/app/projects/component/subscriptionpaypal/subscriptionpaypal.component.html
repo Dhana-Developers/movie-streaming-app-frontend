@@ -1,34 +1,50 @@
-<div class="flex-center">
-  <ion-card>
-    <ion-card-title size="large"></ion-card-title>
-    <ion-card-content>
-      <ion-title>Select plan</ion-title>
-      <ion-item>
-        <ion-checkbox slot="start"></ion-checkbox>
-        <div>
-          <h1>Weekly plan</h1>
-
-        </div>
-      </ion-item>
-      <ion-item>
-        <ion-checkbox slot="start"></ion-checkbox>
-        <div>
-          <h1>Monthly plan</h1>
+<!-- <section class="step-wizard">
+  
+  
+</section> -->
+<section class="ion-align-items-center" >
+  <ion-title class="sub">Go Premium</ion-title>
+  <ion-item>
+    <ion-progress-bar type="determinate" [value]="progress"></ion-progress-bar>
+  </ion-item>
+  <div class="flex-center">
+      <ion-card *ngIf="progress === 0.25">
+        <ion-card-content>
+          <h1>Unlock Advanced Features</h1>
+          <p>Access to Explore Trending Movie</p>
+          <p>Explore Trending Tv Shows</p>
+          <p>Create Favorite Movie List</p>
+          <ion-button color="tertiary" fill="clear" size="full" (click)="viewPlans()">View Plans</ion-button>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="progress === 0.50">
+        <ion-card-content>
+          <ion-title>Select plan</ion-title>
+          <ion-list *ngFor="let plan of plans">
+              <!-- <ion-button fill="clear" size="full" (click)="selectPlan(plan)">
+                <h1 slot="start">${{plan.amount}}</h1>
+                <p slot="end">{{plan.name}}</p>
+              </ion-button> -->
+              
+              <ion-item button (click)="selectPlan(plan)">
+                  <h1 slot="start">${{plan.amount}}</h1>
+                  <p slot="end">{{plan.name}}</p>
+              </ion-item>     
+          </ion-list>
+        </ion-card-content>  
+      </ion-card>
+      <ion-card *ngIf="progress === 0.75"> 
+        <h1>Selected Plan</h1>
+        <ion-item>
+          <ion-label>{{selectedPlan.name}}</ion-label>
+          <ion-label>${{selectedPlan.amount}}</ion-label>
+        </ion-item>
+          <wm-paypal [style.width.px]="width" [height]="height" [layout]="layout" [shape]="shape" [color]="color"
+            [label]="label" [tagline]="true" [disabled]="false" [request]="order"
+            (cancel)="onCancel($event)" (error)="onError($event)" #paypal enableStandardCardFields></wm-paypal>
+        
           
-        </div>
-      </ion-item>
-      <ion-item>
-        <ion-checkbox slot="start"></ion-checkbox>
-        <div>
-          <h1>Monthly plan</h1>
-          
-        </div>
-      </ion-item>
-      <wm-paypal [style.width.px]="width" [height]="height" [layout]="layout" [shape]="shape" [color]="color"
-        [label]="label" [tagline]="true" [disabled]="false" [request]="order"
-        (cancel)="onCancel($event)" (error)="onError($event)" #paypal enableStandardCardFields></wm-paypal>
-    </ion-card-content>
+      </ion-card>
     
-
-  </ion-card>
-</div>
+  </div>
+</section>

@@ -26,13 +26,16 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 
-.myModal .modal-wrapper{
-    position: absolute;
-    top: 0px;
-    left: 0;
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
+.movie-modal {
+    &::part(backdrop) {
+        --background: var(--background)
+    }
+    &::part(content) {
+        width: 100%;
+        height: 80%;
+        margin: auto;
+        border-radius: 10px;
+    }
 }
 
 .flex-center {

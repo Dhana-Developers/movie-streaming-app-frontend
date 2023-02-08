@@ -11,42 +11,41 @@
 <ion-content fullscreen="true">
   <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
 
-  <video class="vid" 
-    *ngIf="isVideoEnabled; else imag"
+  <div *ngIf="isVideoEnabled">
+    <video class="vid" 
+    autoplay
     controls 
     src="{{videoUrl}}" 
     poster="{{backGroundImage}}"
     preload="{{preload}}"
     (ended)="this.getLoadedData($event)">
-    autoplay 
-  </video>
-
-  <ng-template #imag>
-    <div>
-      <ion-img [src]="backGroundImage"></ion-img>
-    </div>
-  </ng-template>
+    </video>
+  </div>
   
+  <div *ngIf="!isVideoEnabled">
+    <ion-img [src]="backGroundImage" alt="poster" style="margin: auto; width: 80%; height: 800px;"></ion-img>
+  </div>
   
-
   <div>
     <div class="ion-margin-start">
       <ion-toolbar>
         <h3>{{title}}</h3>
-        <ion-buttons *ngIf="!isVideoEnabled && videoUrl" slot="primary" (click)="playVideo()">
-          <ion-button color="secondary"><ion-icon style="font-size: 40px;" name="play-circle-outline"></ion-icon>
+        <ion-buttons *ngIf="!isVideoEnabled && videoUrl" slot="primary" >
+          <ion-button color="secondary" (click)="playVideo()" *ngIf="!isPremium || subscribed"><ion-icon style="font-size: 40px;" name="play-circle-outline" ></ion-icon>
           </ion-button>
+          <ion-button color="secondary" (click)="subscribe()" *ngIf="isPremium && !subscribed">Subscribe to Play Premium Movies</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </div>
     <div>
       <ion-toolbar>
         <div class="ion-margin-bottom">
-          <ion-chip colour="dark" outline>ReleaseDate: {{releaseDate}}</ion-chip>
-          <ion-chip colour="dark" outline>Duration: {{runtime}}</ion-chip>
-          <ion-chip colour="dark" outline><ion-icon name="thumbs-up-outline"></ion-icon> <span>{{likes}}</span></ion-chip>
-          <ion-chip colour="dark" outline><ion-icon name="thumbs-down-outline"></ion-icon> <span>{{dislikes}}</span></ion-chip>
-          <ion-chip colour="dark" outline><ion-icon name="eye-outline"></ion-icon> <span>{{likes}}</span></ion-chip>
+          <ion-chip color="dark" outline>ReleaseDate: {{releaseDate}}</ion-chip>
+          <ion-chip color="dark" outline>Duration: {{runtime}}</ion-chip>
+          <ion-chip [color]="likechip" outline (click)="like(id)"><ion-icon [name]="likeicon"></ion-icon> <span>{{likes}}</span></ion-chip>
+          <ion-chip [color]="dislikechip" outline (click)="unlike(id)"><ion-icon [name]="dislikeicon"></ion-icon> <span>{{dislikes}}</span></ion-chip>
+          <ion-chip [color]="viewchip" outline><ion-icon name="eye-outline"></ion-icon> <span>{{views}}</span></ion-chip>
+          <ion-chip color="secondary" outline (click)="addToFavorite()" *ngIf="!favUrl && subscribed"><ion-icon name="eye-outline"></ion-icon> <span>Add to favorites</span></ion-chip>
         </div>
       </ion-toolbar>
     </div>
@@ -58,7 +57,7 @@
     </div>
   </div>
 
-  <div *ngIf="castItemList.length > 0 ">
+  <ion-card *ngIf="castItemList.length > 0 ">
     <ion-item id="auto-trigger">
       <p>cast</p>
       <ion-icon slot="end" name="chevron-down-outline"></ion-icon>
@@ -86,9 +85,9 @@
       </ng-template>
     </ion-popover>
     
-  </div>
+  </ion-card>
 
-  <div *ngIf="crewItemList.length > 0 ">
+  <ion-card *ngIf="crewItemList.length > 0 ">
     <ion-item id="auto-trigger">
         <p>crew</p>
         <ion-icon slot="end" name="chevron-down-outline"></ion-icon>
@@ -115,14 +114,14 @@
         </ion-list>
       </ng-template>
     </ion-popover>
-  </div>
+  </ion-card>
 
   <div *ngIf="commentsContainer.length > 0">
     <ion-card>
       <ion-card-header>Comments</ion-card-header>
       <ion-card-content>
         <ion-item fill="outline">
-          <ion-label position="floating">Commenting as </ion-label>
+          <ion-label position="floating">Commenting as <strong>{{user.username}}</strong></ion-label>
           <ion-input type="text" maxlength="1000" placeholder="comment" [(ngModel)]="comment"></ion-input>
           <ion-button slot="end" (click)="submitComment()">submit</ion-button>
         </ion-item>

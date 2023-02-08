@@ -16,3 +16,34 @@
     --background: #edefef;
     --color: var(--ion-color-primary);
 }
+
+.spotlight {
+    width: 100%;
+    height: 70vh;
+    background-image: url("/assets/images/nighttrain.jpg"), url("/assets/images/yerofdog.jpg");
+    background-repeat: repeat;
+    background-position: center;
+    background-size: cover;
+    margin-bottom: 20px;
+    position: relative;
+
+    .gradient {
+        background: linear-gradient(#ffffff00 40%, #000000c2, #000 95%);
+        width: 100%;
+        height: 100%;
+    }
+
+    .info {
+        width: 100%;
+        position: absolute;
+        bottom: 10px;
+        text-align: center;
+    }
+
+    .btn-vertical {
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

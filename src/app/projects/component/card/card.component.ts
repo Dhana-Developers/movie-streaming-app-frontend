@@ -10,6 +10,8 @@ export class CardComponent implements OnInit {
   @Input() id!: string;
   @Input() title!: string;
   @Input() image!: string;
+  @Input() premium!: boolean;
+  // @Input() favUrl!: boolean;
   @Input() model: any;
   @Output() cardEventTrigger: EventEmitter<any> = new EventEmitter();
 

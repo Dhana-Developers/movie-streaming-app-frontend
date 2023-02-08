@@ -29,6 +29,7 @@ export class RegisterPage implements OnInit {
    }
 
   ngOnInit() {
+    this.store.dispatch(hide());
     this.form = new RegisterPageForm(this.formBuilder).createForm();
   }
 

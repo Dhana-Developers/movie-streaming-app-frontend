@@ -4,6 +4,7 @@ import { PayPalProcessor, OnApprove, OrderRequest } from '../paypal';
 // import { OnApproveData, OnApproveActions } from './paypal/types/buttons';
 import { OnApproveData, OnApproveActions } from '../paypal';
 import { OnCancelData, OnErrorData } from '../paypal/types/buttons';
+import { StorageService } from '../projects/api/service/storage.service';
 
 @Component({
   selector: 'app-tab2',
@@ -14,12 +15,20 @@ import { OnCancelData, OnErrorData } from '../paypal/types/buttons';
 export class Tab2Page {
   sliderContainer: any = [];
   modelType = 'tv';
+  user!: any;
+  isPremium: boolean = false;
 
-  
+  constructor(private service: ThemoviedbService,
+    private storage: StorageService) {}
 
-  constructor(private service: ThemoviedbService) {}
-
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.storage.get('user').then(resp => {
+      console.log(resp);
+      this.user = resp;
+      if (resp.subscription === true) {
+        this.isPremium = true;
+      }
+    })
     this.initializeSliderContainer()
   }
 

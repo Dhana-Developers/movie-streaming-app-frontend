@@ -62,6 +62,7 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   private onIsLoggedIn() {
+    // this.store.dispatch(show());
     this.router.navigate(['tabs', 'popular'])
   }
 

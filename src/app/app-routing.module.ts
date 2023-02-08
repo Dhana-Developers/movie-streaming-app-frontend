@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
@@ -18,6 +18,18 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'subscribe',
+    loadChildren: () => import('./pages/subscribe/subscribe.module').then( m => m.SubscribePageModule)
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
   }
 ];
 @NgModule({

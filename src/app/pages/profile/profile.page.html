@@ -1,0 +1,66 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>profile</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content fullscreen="true">
+  <div class="main-content">
+    <ion-buttons slot="start" class="menu-button">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <section class="user">
+      <ion-item style="justify-content:space-evenly">
+        <div  class="first cred">
+          <ion-label>username: {{username}}</ion-label>
+          <ion-label>email: {{email}}</ion-label>
+ 
+        </div>
+        <div class="avatar">
+          <ion-avatar>
+            <ion-icon style="font-size: 100px;" name="person"></ion-icon>
+          </ion-avatar>
+        </div>
+      </ion-item>
+      
+    </section>
+    <div class="subscription">
+      <ion-card class="details ">
+        <h1>Subscription Info</h1>
+        <ion-row>
+          <ion-col>Plan</ion-col>
+          <ion-col>{{plan}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Status</ion-col>
+          <ion-col *ngIf="isActive">active</ion-col>
+          <ion-col *ngIf="!isActive">expired</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Subscription Date</ion-col>
+          <ion-col>{{subDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Expiry Date</ion-col>
+          <ion-col>{{expDate}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-card>
+
+      <ion-card button class="details sizing" >
+        <ion-card-content>Favorites</ion-card-content>
+        
+      </ion-card>
+      <ion-card button class="details sizing">
+        <ion-card-content>Popular</ion-card-content>
+      </ion-card>
+      <ion-card button class="details sizing">
+        <ion-card-content>Trending</ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+  <ion-footer>Dhana</ion-footer>
+</ion-content>

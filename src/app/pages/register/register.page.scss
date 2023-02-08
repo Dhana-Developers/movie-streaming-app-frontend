@@ -1,4 +1,9 @@
 ion-content {
-    --background: var(--ion-color-success);
+    --background: url('/assets/icon/logo.jpeg');
 }
 
+ion-card {
+    width: 150%;
+    height: auto;
+    justify-content: center;
+}

@@ -15,7 +15,7 @@ import { StorageService } from '../projects/api/service/storage.service';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit{
-  user!: any;
+  user: any;
 
   modelType = 'movie';
   sliderContainer:any = [];
@@ -29,7 +29,7 @@ export class Tab1Page implements OnInit{
   genreMoviesContainer:any = [];
   isGenreSelected: boolean = false;
   loginState!: LoginState;
-  
+  bgImage: string = '/assets/icon/favicon.png';
 
   constructor(private service: ThemoviedbService,
     private store: Store<AppState>,
@@ -50,7 +50,9 @@ export class Tab1Page implements OnInit{
     await this.storage.get('user').then(resp => {
       console.log(resp);
       this.user = resp;
-    })
+    });
+    
+    
   }
   
 
@@ -64,8 +66,12 @@ export class Tab1Page implements OnInit{
           image: ('http://image.tmdb.org/t/p/original/' + trendingMovie.backdrop_path),
           poster: ('http://image.tmdb.org/t/p/original/' + trendingMovie.poster_path),
           modelItem: trendingMovie
+          
         });
+        
+        
       });
+      console.log(this.sliderContainer[0].image);
     });
   }
 
@@ -94,6 +100,7 @@ export class Tab1Page implements OnInit{
           id: element.id,
           title: element.title,
           description: element.overview,
+          premium: element.premium,
           image: element.get_poster,
           modelItem: element
 
@@ -126,6 +133,7 @@ export class Tab1Page implements OnInit{
             title: element.title,
             description: element.overview,
             image: element.get_poster,
+            premium: element.premium,
             modelItem: element
           });
         });
@@ -172,6 +180,7 @@ export class Tab1Page implements OnInit{
           title: element.title,
           description: element.overview,
           image: element.get_poster,
+          premium: element.premium,
           modelItem: element
         });
       });

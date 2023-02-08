@@ -1,5 +1,5 @@
 <div class="card" (click)="cardClickEventTrigger(model)">
-  <!--ion-budge class="bad" color="primary">{{voterRating}}</ion-budge-->
+  <ion-icon *ngIf="premium" name="logo-usd" size="medium" color="secondary" style="font-weight: 300;"></ion-icon>
   <div>
     <ion-img [src]="image"></ion-img>
   </div>

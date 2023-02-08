@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // align-self: center;
+    justify-content: center;
+    margin: auto;
+    background-image: url('/assets/icon/logo.jpeg');
+    height: 100vh;
+
+    h1 {
+        font-weight: 500;
+        font-size: 80px;
+        font-family: sans-serif;
+        // font-style: oblique;
+        // text-overflow: clip;
+        text-align: center;
+        // text-shadow: cadetblue;
+        text-decoration-style: wavy;
+        // text-decoration-color: darkslategrey;
+    }
+}
+
+ion-img {
+    width: 150px;
+    height: 75px;
+}
+
+ion-card {
+    align-items: center;
+    width: 30%;
+    height: 13%;
+    // align-self: center;
+    text-align: center;
+    justify-content: center;
+    // margin: 100px;
+}
+
+ion-button {
+    text-transform: lowercase;
+}

@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
 import { AppState } from 'src/app/store/AppState';
 import { LoginState } from 'src/app/store/login/LoginState';
-
+import { StorageService } from '../../api/service/storage.service';
+import { AlertController } from '@ionic/angular';
 import { ThemoviedbService } from '../../api/service/themoviedb.service';
 
 @Component({
@@ -15,7 +17,8 @@ export class ModelPageComponent implements OnInit {
 
   @Input() modelItemList!: any;
   @Input() modelType!: string;
-
+  @Input() favUrl!: boolean;
+  
   videoUrl!: string;
   preload = 'auto';
 
@@ -34,16 +37,36 @@ export class ModelPageComponent implements OnInit {
   runtime!: string;
   isVideoEnabled!: boolean;
   comment: any;
-  loginState!: LoginState;
+  views: any;
+  isPremium!: boolean;
+  user: any;
+  subscribed!: boolean;
+
+  likechip: string = 'dark';
+  dislikechip: string = 'dark';
+  likeicon: string = 'thumbs-up-outline';
+  dislikeicon: string = 'thumbs-down-outline';
+  viewchip: string = 'dark';
+  viewicon: string = 'eye-outline';
 
   constructor(private service: ThemoviedbService,
-    private store: Store<AppState>) { }
+    private router: Router,
+    private storage: StorageService,
+    private alertController: AlertController) { }
 
-  ngOnInit() {
-    this.store.select('login').subscribe(loginstate => {
-      this.loginState = loginstate;
-      console.log(loginstate.user);
+  async ngOnInit() {
+    await this.storage.get('user').then(user => {
+      this.user = user;
+      this.subscribed = this.user.subscription
+      console.log(user);
+      let rout = this.router.url;
+      console.log(rout);
       
+      if (rout === '/tabs/favorite') {
+        this.favUrl = true;
+      }else {
+        this.favUrl = false;
+      }
     });
     this.initializeContainer();
   }
@@ -53,12 +76,14 @@ export class ModelPageComponent implements OnInit {
     this.isLoading = true;
     this.title = this.modelItemList.detailResponseE1.title; 
     this.id = this.modelItemList.detailResponseE1.id;
+    this.isPremium = this.modelItemList.detailResponseE1.premium;
     this.backGroundImage = this.modelItemList.detailResponseE1.get_poster;
     this.overview = this.modelItemList.detailResponseE1.overview;
     this.releaseDate = this.modelItemList.detailResponseE1.release_date;
     this.runtime = this.modelItemList.detailResponseE1.runtime + 'minutes';
     this.likes = this.modelItemList.ratingResponse.likes;
     this.dislikes = this.modelItemList.ratingResponse.dislikes;
+    this.views = this.modelItemList.ratingResponse.views;
 
     this.modelItemList.crewResponseE1.forEach((element: any) => {
       this.crewItemList.push(element);
@@ -131,6 +156,23 @@ export class ModelPageComponent implements OnInit {
 
   playVideo() {
     this.isVideoEnabled = true;
+    this.service.addView(this.id).subscribe(resp => {
+      console.log(resp);
+      
+      if (resp.code === 0) {
+        this.views += 1;
+        this.viewchip = 'secondary';
+        this.viewicon= 'eye';
+      } else {
+        console.log('server error');
+        
+      }
+    })
+  }
+
+  subscribe() {
+    this.router.navigate(['subscribe']);
+    this.closeModel();
   }
 
   getLoadedData(evt: any) {
@@ -144,13 +186,70 @@ export class ModelPageComponent implements OnInit {
 
   submitComment() {
     let com = {
-      "user_id": this.loginState.user.id,
+      "user_id": this.user.id,
       "movie_id": this.id,
       "comment": this.comment
     }
     this.service.postComment(com).subscribe(resp => {
       console.log(resp);
       this.commentsContainer.push(resp);
+    })
+  }
+
+  like(id: any) {
+    this.service.addLike(id).subscribe(resp => {
+      console.log(resp);
+      if (resp.code === 0) {
+        this.likes += 1;
+        this.likechip = 'success';
+        this.likeicon = 'thumbs-up';
+      } else {
+        console.log('server error');
+        
+      }
+    })
+  }
+
+  unlike(id: any) {
+    this.service.disLike(id).subscribe(resp => {
+      console.log(resp);
+      if (resp.code === 0) {
+        this.dislikes += 1;
+        this.dislikechip = 'danger';
+        this.dislikeicon = 'thumbs-down';
+      } else {
+        console.log(resp.error);
+      }
+    })
+  }
+
+  async addToFavorite() {
+    const info = {
+      "movieid": this.id,
+      "userid": this.user.id
+    }
+    const alert = await this.alertController.create({
+      // header: 'Alert',
+      // subHeader: 'Important message',
+      cssClass: 'custom-alert',
+      message: 'Movie added to favorites',
+      buttons: ['OK'],
+    });
+    const alerterr = await this.alertController.create({
+      // header: 'Alert',
+      // subHeader: 'Important message',
+      cssClass: 'custom-alert',
+      message: 'Movie already in favorites',
+      buttons: ['OK'],
+    });
+    console.log(info);
+    await this.service.addFav(info).subscribe(resp =>{
+      console.log(resp);
+      if (resp.code == 0) {
+        alert.present();
+      }else {
+        alerterr.present();
+      }
     })
   }
 

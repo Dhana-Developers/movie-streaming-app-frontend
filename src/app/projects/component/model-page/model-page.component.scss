@@ -4,4 +4,9 @@
     padding-top: 0%;
 }
 
-           
+ion-alert .custom-alert {
+    --backdrop-opacity: 0.1;
+    --background: var(--ion-color-success);
+    --color: var(--ion-color-success);
+    // --color: var(--ion-color-success-contrast);
+  } 

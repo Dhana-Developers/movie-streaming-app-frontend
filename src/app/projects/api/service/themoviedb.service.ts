@@ -90,10 +90,40 @@ export class ThemoviedbService {
     return this.http.get(requestUrl);
   }
 
+  addLike(id: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/addlike/`;
+    return this.http.post(requestUrl, id);
+  }
+
+  disLike(id: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/dislike/`;
+    return this.http.post(requestUrl, id);
+  }
+
+  addView(id: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/addview/`;
+    return this.http.post(requestUrl, id);
+  }
+
+  addFav(info: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/addfav/`;
+    return this.http.post(requestUrl, info);
+  }
+
+  getFav(id: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/getfavorite/${id}`;
+    return this.http.get(requestUrl);
+  }
+
+  addSub(info: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/addsub/`;
+    return this.http.post(requestUrl, info);
+  }
+
   async presentModal(modelItem: any) {
     const modal = await this.modalController.create({
       component: ModelPageComponent,
-      cssClass: 'myModal',
+      cssClass: 'movie-modal',
       componentProps: {
         modelItemList: modelItem
       }
