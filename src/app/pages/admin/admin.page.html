@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>MOVIE ADMIN</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="top">
+        <ion-tab-button tab="dashboard" #popular>
+          <ion-icon [name]="popular.selected ? 'star' : 'star-outline'"></ion-icon>
+          <ion-label>Dashboard</ion-label>
+        </ion-tab-button>
+        
+        <ion-tab-button tab="movies" #tab2>
+          <ion-icon [name]="tab2.selected ? 'trending-up' : 'trending-up-outline'"></ion-icon>
+          <ion-label>Movies</ion-label>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="subscriptions" #tab3>
+          <ion-icon [name]="tab3.selected ? 'flag' : 'flag-outline'"></ion-icon>
+          <ion-label>Subscriptions</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="users" #tab4>
+          <ion-icon [name]="tab4.selected ? 'flag' : 'flag-outline'"></ion-icon>
+          <ion-label>Subscriptions</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <router-outlet></router-outlet>
+</ion-content>
+

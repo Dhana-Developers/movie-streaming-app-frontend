@@ -21,7 +21,7 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
     {
       id: 1,
       name: 'Daily Plan',
-      amount: 0.8
+      amount: 0.3
     },
     {
       id: 2,

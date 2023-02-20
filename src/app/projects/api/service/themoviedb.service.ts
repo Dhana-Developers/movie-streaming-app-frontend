@@ -45,6 +45,11 @@ export class ThemoviedbService {
     return this.http.get(requestUrl);
   }
 
+  allMovies(): Observable<any> {
+    const requestUrl = `${baseUrl}/api/movies/`;
+    return this.http.get(requestUrl);
+  }
+
   getDetailList(type: string, id: string): Observable<any> {
     const requestUrl = `https://api.themoviedb.org/3/${type}/${id}?api_key=${apiKey}&language=en-US`;
     return this.http.get(requestUrl);
@@ -120,6 +125,13 @@ export class ThemoviedbService {
     return this.http.post(requestUrl, info);
   }
 
+  
+
+  getSubs(): Observable<any> {
+    const requestUrl = `${baseUrl}/api/subs/`;
+    return this.http.get(requestUrl);
+  }
+
   async presentModal(modelItem: any) {
     const modal = await this.modalController.create({
       component: ModelPageComponent,
@@ -138,6 +150,8 @@ export class ThemoviedbService {
        this.currentModel.pop();
     });
   }
+
+
 
 }
 

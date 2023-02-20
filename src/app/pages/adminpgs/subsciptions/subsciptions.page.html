@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start"></ion-menu-button>
+    <ion-title>Subscriptions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <ion-button expand="block" (click)="addOrderModal()" class="float">Add Order</ion-button> -->
+  <ion-list [inset]="true">
+   
+    <ion-item>
+      <ion-label>user</ion-label>
+      <ion-label>transaction id</ion-label>
+      <ion-label>subscrption date</ion-label>
+      <ion-label>expiry date</ion-label>
+      <ion-label>plan</ion-label>
+      <ion-label>status</ion-label>
+      <!-- <ion-label>Total price</ion-label>
+      <ion-label>Actions</ion-label> -->
+    </ion-item>
+    <ion-card *ngFor="let item of subsContainer">
+      <ion-item >
+        <ion-label>{{ item.user }}</ion-label>
+        <ion-label>{{ item.transaction }}</ion-label>
+        <ion-label>{{item.sub_date}}</ion-label>
+        <ion-label>{{item.exp_date}} {{item.time}}</ion-label>
+        <ion-label>{{item.plan}}</ion-label>
+        <ion-label>
+          <ion-note *ngIf="item.status">active</ion-note> 
+          <ion-note *ngIf="!item.status">expired</ion-note>
+        </ion-label>
+        
+      </ion-item>
+    </ion-card>
+
+  </ion-list>
+  
+</ion-content>
+

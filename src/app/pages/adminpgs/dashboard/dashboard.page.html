@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Movies</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Total Movies</ion-label>
+          <p>{{ moviesCnt}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Popular Movies</ion-label>
+          <p>{{ popularCnt }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Genres</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Total</ion-label>
+          <p>{{ genresCnt }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Subscriptions</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Total</ion-label>
+          <p>{{subscriptons.total}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Active</ion-label>
+          <p>{{subscriptons.active}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Expired</ion-label>
+          <p>{{subscriptons.expired}}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Users</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Total</ion-label>
+          <p>{{users.total}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Premium</ion-label>
+          <p>{{users.premium}}</p>
+        </ion-item>
+        <ion-item>
+          <ion-label>Free</ion-label>
+          <p>{{users.free}}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

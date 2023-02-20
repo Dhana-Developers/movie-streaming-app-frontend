@@ -66,4 +66,9 @@ export class AuthService {
     const requestUrl = `${baseUrl}/api/userprofile/${id}`;
     return this.http.get(requestUrl);
   }
+
+  getUsers(): Observable<any> {
+    const requestUrl = `${baseUrl}/api/users/`;
+    return this.http.get(requestUrl);
+  }
 }

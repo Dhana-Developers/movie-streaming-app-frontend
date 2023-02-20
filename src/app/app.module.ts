@@ -28,9 +28,9 @@ import { StepState } from '@angular/cdk/stepper';
     IonicStorageModule.forRoot({name: '__appdb', driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]}),
     PayPalModule.init({
       clientId: 'AdcMi5Pv2Yh6yWEJag2MtDxQRFzCoWfmbwaSb_X4bYdw_EDeiQ2JSLD4p5B0FRrzvwpESfISW3xA6IHD',
-      currency: 'USD',
+      // currency: 'USD',
       integrationDate: '2023-01-19',
-      // merchantId: 'AUk5FBaMYhZdFYX4qOJCaFqCef2FveyTZXc2yxqhuBfZv621bKU7uTham5CFjYnoAk5ir5sbHrOupTwY',
+      merchantId: 'AUk5FBaMYhZdFYX4qOJCaFqCef2FveyTZXc2yxqhuBfZv621bKU7uTham5CFjYnoAk5ir5sbHrOupTwY',
       commit: true
     }),
   ],
