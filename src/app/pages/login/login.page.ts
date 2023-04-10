@@ -10,7 +10,7 @@ import { hide, show } from 'src/app/store/loading/Loading.Actions';
 import { LoginState } from 'src/app/store/login/LoginState';
 import { AuthService } from 'src/app/projects/api/service/authservice.service';
 import { User } from 'src/app/model/user/User';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { StorageService } from 'src/app/projects/api/service/storage.service';
 
 @Component({
@@ -28,7 +28,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private auth: AuthService,
     private storage: StorageService,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController) {
     this.form = FormGroup;
    }
 
@@ -39,7 +40,7 @@ export class LoginPage implements OnInit, OnDestroy {
       console.log(value);
       if (value) {
         this.onIsLoggedIn();
-      }else {
+      }else if (!value){
         this.store.dispatch(hide());
       }
     })
@@ -62,8 +63,16 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   private onIsLoggedIn() {
-    // this.store.dispatch(show());
-    this.router.navigate(['tabs', 'popular'])
+    
+    this.storage.get('user').then(curuser => {
+      if (curuser.usertype === 'admin') {
+        this.adminnav();
+        this.store.dispatch(hide());
+      } else {
+        this.router.navigate(['tabs', 'popular']);
+      }
+    })
+    
   }
 
   async login() {
@@ -72,6 +81,20 @@ export class LoginPage implements OnInit, OnDestroy {
       'username': this.form.get('username').value,
       'password': this.form.get('password').value
     }
+
+    const toast1 = await this.toastCtrl.create({
+      message: 'login successful',
+      duration: 1500,
+      position: 'middle',
+      color: 'success'
+    });
+
+    const toast2 = await this.toastCtrl.create({
+      message: 'Invalid credentials please try again',
+      duration: 1500,
+      position: 'middle',
+      color: 'danger'
+    });
     
     await this.auth.signin(user).subscribe((resp) => {
       // console.log(user);
@@ -81,6 +104,7 @@ export class LoginPage implements OnInit, OnDestroy {
         let error = {message: resp.msg};
         this.store.dispatch(loginFail({error}));
         this.store.dispatch(hide());
+        toast2.present();
       } else {
         const user = new User();
         user.username = resp.username;
@@ -90,12 +114,49 @@ export class LoginPage implements OnInit, OnDestroy {
         // this.store.dispatch(loginSucccess({user}));
         this.storage.set('user', user);
         this.storage.set('isLoggedIn', true);
-        // this.store.dispatch(hide());
-        this.router.navigate(['tabs', 'popular']);
+        toast1.present();
+        if (resp.usertype === 'admin') {
+          this.adminnav();
+          this.store.dispatch(hide());
+        } else {
+          this.router.navigate(['tabs', 'popular']);
+        }
+        
       }
       
     });
     
+  }
+
+  async adminnav() {
+    const alert = await this.alertCtrl.create({
+      header: 'select page',
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'Movie Page',
+          role: 'customer',
+          cssClass: 'alert-button-cancel',
+          handler: () => {
+          },
+        },
+        {
+          text: 'Admin page',
+          cssClass: 'alert-button-confirm',
+          role: 'admin',
+          handler: () => {
+          },
+        }
+      ]
+    });
+
+    await alert.present();
+      const { role } = await alert.onDidDismiss();
+      if (role === 'admin') {
+        this.router.navigate(['admin']);
+      } else {
+        this.router.navigate(['tabs', 'popular']);
+      }
   }
 
   private async onError(loginState: LoginState) {
@@ -117,6 +178,6 @@ export class LoginPage implements OnInit, OnDestroy {
   // }
 
   register() {
-    this.router.navigate(['register'])
+    this.router.navigate(['register']);
   }
 }

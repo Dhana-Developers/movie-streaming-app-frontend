@@ -5,6 +5,7 @@ import { PayPalProcessor, OnApprove, OrderRequest } from '../paypal';
 import { OnApproveData, OnApproveActions } from '../paypal';
 import { OnCancelData, OnErrorData } from '../paypal/types/buttons';
 import { StorageService } from '../projects/api/service/storage.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-tab2',
@@ -13,8 +14,10 @@ import { StorageService } from '../projects/api/service/storage.service';
   
 })
 export class Tab2Page {
-  sliderContainer: any = [];
-  modelType = 'tv';
+  sliderContainerMov: any = [];
+  sliderContainerTv: any = [];
+  modelType1 = 'movie';
+  modelType2 = 'tv';
   user!: any;
   isPremium: boolean = false;
 
@@ -34,10 +37,19 @@ export class Tab2Page {
 
   
   initializeSliderContainer() {
-    this.service.getTrendingList(this.modelType).subscribe(trendingMoviesE1 => {
+    forkJoin([this.service.getTrendingMov(this.modelType1), this.service.getTrendingTv(this.modelType2)]).subscribe(trendingMoviesE1 => {
       console.log(trendingMoviesE1);
-      trendingMoviesE1.results.forEach((trendingMovie: any) => {
-        this.sliderContainer.push({
+      trendingMoviesE1[0].results.forEach((trendingMovie: any) => {
+        this.sliderContainerMov.push({
+          id: trendingMovie.id,
+          title: trendingMovie.title,
+          image: ('http://image.tmdb.org/t/p/original/' + trendingMovie.backdrop_path),
+          poster: ('http://image.tmdb.org/t/p/original/' + trendingMovie.poster_path),
+          modelItem: trendingMovie
+        });
+      });
+      trendingMoviesE1[1].results.forEach((trendingMovie: any) => {
+        this.sliderContainerTv.push({
           id: trendingMovie.id,
           title: trendingMovie.name,
           image: ('http://image.tmdb.org/t/p/original/' + trendingMovie.backdrop_path),

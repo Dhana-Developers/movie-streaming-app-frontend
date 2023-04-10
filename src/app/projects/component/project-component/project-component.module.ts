@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../card/card.component';
 import { SliderComponent } from '../slider/slider.component';
@@ -13,6 +13,7 @@ import { ProfilepopoverComponent } from '../profilepopover/profilepopover.compon
 import { PayPalModule } from "../../../paypal/paypal.module";
 
 @NgModule({
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [CardComponent, SliderComponent, ModelPageComponent, ProfilebarComponent, SubscriptionpaypalComponent, ProfilepopoverComponent],
     exports: [CardComponent, SliderComponent, ModelPageComponent, ProfilebarComponent, SubscriptionpaypalComponent],
     imports: [

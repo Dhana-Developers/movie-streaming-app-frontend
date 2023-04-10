@@ -6,10 +6,10 @@
 <ion-content [fullscreen]="true">
   <ion-header>
     <ion-toolbar>
-      <ion-buttons class="ion-margin-start" slot="start">
+      <ion-button class="ion-margin-start" slot="start">
         <ion-icon style="font-size: 48px" name="play-circle"></ion-icon>
-      </ion-buttons>
-      <ion-title>
+      </ion-button>
+      <ion-title style="text-align: center;">
         Trending Movies
       </ion-title>
     </ion-toolbar>
@@ -19,7 +19,8 @@
     <app-subscribe></app-subscribe>
   </section> -->
   
-  <section>
-    <app-slider [sliderInputValue] = "sliderContainer" *ngIf="isPremium"></app-slider>
+  <section >
+    <app-slider  [slider1InputValue] = "sliderContainerMov" *ngIf="isPremium"></app-slider>
+    <app-slider  [slider2InputValue] = "sliderContainerTv" *ngIf="isPremium"></app-slider>
   </section>
 </ion-content>

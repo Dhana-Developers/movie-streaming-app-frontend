@@ -1,6 +1,7 @@
 import { CdkStepper } from '@angular/cdk/stepper';
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { Route, Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { concat } from 'rxjs';
 import { OnApprove, PayPalProcessor } from 'src/app/paypal/paypal.component';
 import { OnApproveActions, OnApproveData, OnCancelData, OnErrorData } from 'src/app/paypal/types/buttons';
@@ -17,11 +18,18 @@ import { ThemoviedbService } from '../../api/service/themoviedb.service';
 export class SubscriptionpaypalComponent implements OnInit, OnApprove {
   progress: number = 0.25;
   selectedPlan: any;
+  mpesa: boolean = false;
+  paypal: boolean = false;
+  intasend: boolean = false;
+  mpesaContact!: string;
+  error!: string;
+  loading: boolean = false;
+
   plans: any = [
     {
       id: 1,
       name: 'Daily Plan',
-      amount: 0.3
+      amount: 0.01
     },
     {
       id: 2,
@@ -31,7 +39,7 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
     {
       id: 3,
       name: 'Monthly Plan',
-      amount: 10
+      amount: 50
     }
   ]
 
@@ -46,7 +54,8 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
   user: any;
   constructor(private storage: StorageService,
     private service: ThemoviedbService,
-    private router: Router) { }
+    private router: Router,
+    private toastCtrl: ToastController) { }
 
   ngOnInit() {
     this.storage.get('user').then(resp => {
@@ -54,6 +63,8 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
       
       this.user = resp;
     });
+
+    
   }
 
   onApprove(data: OnApproveData, actions: OnApproveActions) {
@@ -64,16 +75,22 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
     return actions.order.capture().then(details => {
 
       console.log('Transaction completed by', details);
-      this.goPremium(details);
+      this.goPremiumPaypal(details);
 
       // Call your server to handle the transaction
       return Promise.reject('Transaction aborted by the server');
     });
   }
 
-  onCancel(data: OnCancelData) {
-
-    console.log('Transaction Cancelled:', data); 
+  async onCancel(data: OnCancelData) {
+    const toastError = await this.toastCtrl.create({
+      message: 'Transaction cancelled',
+      duration: 2000,
+      position: 'middle',
+      color: 'danger'
+    });
+    console.log('Transaction Cancelled:', data);
+    await toastError.present(); 
   }
 
   onError(data: OnErrorData) { 
@@ -88,6 +105,30 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
 
   selectPlan(plan: any) {
     this.selectedPlan = plan;
+    this.progress += 0.25;
+    // this.goPremium();
+  }
+
+  selectIntasend(){
+    this.intasend = true;
+    this.progress = 0.85
+
+    new window.IntaSend({
+      // Replace with your Publishable Key
+      publicAPIKey: "ISPubKey_test_91ffc81a-8ac4-419e-8008-7091caa8d73f",
+      live: false //set to true when going live
+    })
+    .on("COMPLETE", (results: any) => console.log("Do something on success", results))
+    .on("FAILED", (results: any) => console.log("Do something on failure", results))
+    .on("IN-PROGRESS", (results: any) => console.log("Payment in progress status", results))
+  }
+
+  selectMpesa(){
+    this.mpesa = true;
+    this.progress = 0.85
+  }
+
+  selectPaypal(){
     const initorder = {
       intent: 'CAPTURE', 
       // payer: {
@@ -147,23 +188,91 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
       }]
     };
     this.order = initorder;
-    this.progress += 0.25;
-    // this.goPremium();
+    
+    this.paypal = true;
+    this.progress = 0.85
   }
   
-  goPremium(transaction: any) {
+  async goPremiumPaypal(transaction: any) {
+    this.loading = true;
     let trans = {
       transId: transaction.id,
       planid: this.selectedPlan.id,
       userid: this.user.id
     }
-    this.service.addSub(trans).subscribe(resp =>{
+
+    const toastSuccess = await this.toastCtrl.create({
+      message: 'subscription successful',
+      duration: 2000,
+      position: 'middle',
+      color: 'success'
+    });
+
+    const toastError = await this.toastCtrl.create({
+      message: 'Error subscription unsuccessful please contact support',
+      duration: 2000,
+      position: 'middle',
+      color: 'danger'
+    });
+    await this.service.addSubPaypal(trans).subscribe(resp =>{
       console.log(resp);
       if (resp.code === 0){
         this.storage.remove('user');
         this.storage.set('user', resp.user);
-        this.router.navigate(['tabs', 'popular']);
+        window.location.reload();
+        toastSuccess.present();
+        // this.router.navigate(['tabs', 'popular']);
       } else {
+        toastError.present();
+      }
+    })
+  }
+
+  async payMpesa() {
+    this.loading = true;
+    let trans = {
+      userid: this.user.id,
+      plan: this.selectedPlan,
+      payerContact: this.mpesaContact
+    }
+    
+    const prompt = await this.toastCtrl.create({
+      message: 'processing transaction check prompt on your phone',
+      duration: 2000,
+      position: 'middle',
+      color: 'secondary'
+    });
+    
+    const toastSuccess = await this.toastCtrl.create({
+      message: 'subscription successful',
+      duration: 2000,
+      position: 'middle',
+      color: 'success'
+    });
+
+    const toastError = await this.toastCtrl.create({
+      message: this.error,
+      duration: 2000,
+      position: 'middle',
+      color: 'danger'
+    });
+    prompt.present();
+    await this.service.addSubMpesa(trans).subscribe(resp =>{
+      
+      console.log(resp);
+      if (resp.code === 0){
+        this.storage.remove('user');
+        this.storage.set('user', resp.user);
+        toastSuccess.present();
+        this.loading = false;
+        window.location.reload();
+        // this.router.navigate(['tabs', 'popular']);
+      } else if (resp.code === 1) {
+        this.error = String(resp.error);
+        console.log(this.error);
+        (this.error);
+        this.loading = false;
+        toastError.present();
 
       }
     })

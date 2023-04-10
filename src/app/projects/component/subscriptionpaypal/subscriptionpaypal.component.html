@@ -8,43 +8,72 @@
     <ion-progress-bar type="determinate" [value]="progress"></ion-progress-bar>
   </ion-item>
   <div class="flex-center">
-      <ion-card *ngIf="progress === 0.25">
-        <ion-card-content>
-          <h1>Unlock Advanced Features</h1>
-          <p>Access to Explore Trending Movie</p>
-          <p>Explore Trending Tv Shows</p>
-          <p>Create Favorite Movie List</p>
-          <ion-button color="tertiary" fill="clear" size="full" (click)="viewPlans()">View Plans</ion-button>
-        </ion-card-content>
-      </ion-card>
-      <ion-card *ngIf="progress === 0.50">
-        <ion-card-content>
-          <ion-title>Select plan</ion-title>
-          <ion-list *ngFor="let plan of plans">
-              <!-- <ion-button fill="clear" size="full" (click)="selectPlan(plan)">
+    <ion-card *ngIf="progress === 0.25">
+      <ion-card-content>
+        <h1>Unlock Advanced Features</h1>
+        <p>Access to Explore Trending Movie</p>
+        <p>Explore Trending Tv Shows</p>
+        <p>Create Favorite Movie List</p>
+        <ion-button color="tertiary" fill="clear" size="full" (click)="viewPlans()">View Plans</ion-button>
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="progress === 0.50">
+      <ion-card-content>
+        <ion-title>Select plan</ion-title>
+        <ion-list *ngFor="let plan of plans">
+            <!-- <ion-button fill="clear" size="full" (click)="selectPlan(plan)">
+              <h1 slot="start">${{plan.amount}}</h1>
+              <p slot="end">{{plan.name}}</p>
+            </ion-button> -->
+            
+            <ion-item button (click)="selectPlan(plan)">
                 <h1 slot="start">${{plan.amount}}</h1>
                 <p slot="end">{{plan.name}}</p>
-              </ion-button> -->
-              
-              <ion-item button (click)="selectPlan(plan)">
-                  <h1 slot="start">${{plan.amount}}</h1>
-                  <p slot="end">{{plan.name}}</p>
-              </ion-item>     
-          </ion-list>
-        </ion-card-content>  
-      </ion-card>
-      <ion-card *ngIf="progress === 0.75"> 
-        <h1>Selected Plan</h1>
-        <ion-item>
-          <ion-label>{{selectedPlan.name}}</ion-label>
-          <ion-label>${{selectedPlan.amount}}</ion-label>
-        </ion-item>
-          <wm-paypal [style.width.px]="width" [height]="height" [layout]="layout" [shape]="shape" [color]="color"
-            [label]="label" [tagline]="true" [disabled]="false" [request]="order"
-            (cancel)="onCancel($event)" (error)="onError($event)" #paypal enableStandardCardFields></wm-paypal>
-        
-          
-      </ion-card>
-    
+            </ion-item>     
+        </ion-list>
+      </ion-card-content>  
+    </ion-card>
+    <ion-card *ngIf="progress === 0.75"> 
+      <h1>Selected Plan</h1>
+      <ion-item>
+        <ion-label>{{selectedPlan.name}}</ion-label>
+        <ion-label>${{selectedPlan.amount}}</ion-label>
+      </ion-item>
+      <h2>Select Payment Method</h2>
+      <ion-item button (click)="selectMpesa()">Mpesa</ion-item>
+      <ion-item button (click)="selectPaypal()">Paypal</ion-item>
+      <!-- <ion-item button (click)="selectIntasend()">Intasend</ion-item> -->
+    </ion-card>
+    <ion-card *ngIf="mpesa === true && progress === 0.85">
+      <h1>Lipa na Mpesa</h1>
+      <ion-label>Enter mpesa number</ion-label>
+      <ion-input [(ngModel)]="mpesaContact" placeholder="254712345678" type="text"></ion-input>
+      <ion-button (click)="payMpesa()">Pay</ion-button>
+      <!-- <iframe
+        src="https://buy.moonpay.com/?apiKey=[your_api_key]"
+        allow="accelerometer; autoplay; camera; gyroscope; payment"
+        width="100%"
+        height="100%"
+        frameborder="0"
+      >
+      </iframe> -->
+    </ion-card>
+    <ion-card *ngIf="paypal === true && progress === 0.85">
+      <h1>Pay With Paypal</h1>
+      <wm-paypal [style.width.px]="width" [height]="height" [layout]="layout" [shape]="shape" [color]="color"
+          [label]="label" [tagline]="true" [disabled]="false" [request]="order"
+          (cancel)="onCancel($event)" (error)="onError($event)" #paypal enableStandardCardFields></wm-paypal>
+    </ion-card>
+    <!-- <ion-card *ngIf="intasend === true && progress === 0.85">
+      <h1>Intasend</h1>
+      <div><button class="intaSendPayButton" data-amount="10" data-currency="KES" data-email="joe@doe.com" data-first_name="JOE" data-last_name="DOE" data-country="KE">Pay Now</button></div>
+    </ion-card> -->
+    <div class="loading" *ngIf="loading">
+        <ion-spinner name="circles" color="success"></ion-spinner>
+    </div>
   </div>
+  <!-- <ion-spinner *ngIf="loading" name="crescent" size="20" color="success"></ion-spinner> -->
 </section>
+<!-- <div class="loading" *ngIf="loading"> -->
+  <!-- <ion-spinner name="crescent" size="20" color="success"></ion-spinner> -->
+<!-- </div> -->

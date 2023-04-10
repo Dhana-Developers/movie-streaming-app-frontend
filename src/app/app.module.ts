@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { Drivers } from '@ionic/storage';
@@ -14,27 +14,28 @@ import { LoadingComponent } from './projects/component/loading/loading.component
 import { NgxRerenderModule } from 'ngx-rerender';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { PayPalModule } from './paypal';
-import { NgxPayPalModule } from 'ngx-paypal';
-import {CdkStepperModule} from '@angular/cdk/stepper'; 
-import { StepState } from '@angular/cdk/stepper';
+
 
 @NgModule({
   declarations: [AppComponent, LoadingComponent],
   imports: [BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    
     HttpClientModule,
     ...AppStoreModule,
     IonicStorageModule.forRoot({name: '__appdb', driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]}),
     PayPalModule.init({
-      clientId: 'AdcMi5Pv2Yh6yWEJag2MtDxQRFzCoWfmbwaSb_X4bYdw_EDeiQ2JSLD4p5B0FRrzvwpESfISW3xA6IHD',
+      clientId: 'ARHTElrtJoh9YSeYTvFLIz4H_rpyLXFYg5008wmJuFckK3C1NUa4D0azXuYhtJ6nl3jliDEg1jyMdu45',
       // currency: 'USD',
       integrationDate: '2023-01-19',
-      merchantId: 'AUk5FBaMYhZdFYX4qOJCaFqCef2FveyTZXc2yxqhuBfZv621bKU7uTham5CFjYnoAk5ir5sbHrOupTwY',
+      // merchantId: 'AS7Rgz12nK_IYHQHukeLyr5K2127DaNjs7OqKIL9R2NamyGf1pOoQzm1Fnf78Mn6WKmPq2Xh2x-SdL6X',
       commit: true
     }),
+    
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
+  
 })
 export class AppModule {}

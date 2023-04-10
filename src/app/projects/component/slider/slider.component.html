@@ -1,7 +1,32 @@
-<ion-slides pager=true [options]="slideOpts">
-  <ion-slide *ngFor="let item of sliderInputValue" (click)="sliderClickEventTrigger(item.modelItem)">
-    <img [ngClass]="{'ion-hide' : isSmallSizeScreen ? true: false}" src="{{item.image}}">
-    <img [ngClass]="{'ion-hide' : !isSmallSizeScreen ? true: false}" src="{{item.poster}}">
-    <h2 class="ion-hide-xl text-content">{{item.title}}</h2>
-  </ion-slide>
-</ion-slides>
+
+      
+      <ion-card>
+        
+          <swiper-container  loop="true" autoplay="true" effect="cube" #swiper>
+            
+            <swiper-slide *ngFor="let item of slider1InputValue">
+              <ion-card-title style="text-align: center;">movies</ion-card-title>
+              <img src="{{item.poster}}">
+              
+              <ion-card-content>
+                <ion-title >{{item.title}}</ion-title>
+              </ion-card-content>
+            </swiper-slide>
+          </swiper-container>
+      </ion-card>
+
+      
+      <ion-card >
+        
+          <swiper-container [modules]="swiperModules" loop="true" keyboard="true"  controller="true" effect="flip">
+            <swiper-slide *ngFor="let item of slider2InputValue">
+              <ion-card-title style="text-align: center;">tv shows</ion-card-title>
+              <img src="{{item.poster}}">
+              <ion-card-content>
+                <ion-title >{{item.title}}</ion-title>
+              </ion-card-content>
+            </swiper-slide>
+          </swiper-container>
+      </ion-card>
+  
+

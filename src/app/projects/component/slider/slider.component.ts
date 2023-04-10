@@ -1,5 +1,8 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Platform } from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
+import Swiper, { Navigation, Pagination, Scrollbar } from 'swiper';
+import { SwiperOptions } from 'swiper';
 
 @Component({
   selector: 'app-slider',
@@ -8,69 +11,33 @@ import { Platform } from '@ionic/angular';
 })
 export class SliderComponent implements OnInit {
 
-  @Input() sliderInputValue: any;
-  @Output() sliderEventTrigger: EventEmitter<any> = new EventEmitter();
-  isSmallSizeScreen!: boolean;
-  slideOpts: any;
+  swiperModules = [IonSlides];
+  @ViewChild('swiper') swiper!: SliderComponent;
+  @Input() slider1InputValue: any;
+  @Input() slider2InputValue: any;
+  // @Output() sliderEventTrigger: EventEmitter<any> = new EventEmitter();
+  // isSmallSizeScreen!: boolean;
+  config: SwiperOptions = {
+    slidesPerView: 2
+  }
   
 
-  constructor(public platform: Platform) { }
-
-  ngOnInit() {
-    this.plateFormCheck();
-    this.platform.resize.subscribe(async () => {
-      this.plateFormCheck();
+  constructor(public platform: Platform) { 
+    const swiper = new Swiper('.swiper', {
+      // Install modules
+      modules: [Navigation, Pagination, Scrollbar],
+      speed: 500,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      // ...
     });
   }
 
-  plateFormCheck() {
-    if (this.platform.width() < 427){
-      this.slideOpts = {
-        spaceBetween: 2,
-        slidesPerView: 1,
-        duration: 500
-      };
-      this.isSmallSizeScreen = true;
-    }else if (this.platform.width() < 640 && this.platform.width() > 427) {
-      this.slideOpts ={
-        spaceBetween: 2,
-        slidesPerView: 2,
-        duration: 500
-      };
-      this.isSmallSizeScreen = true;
-    }else if (this.platform.width() < 854 && this.platform.width() > 640) {
-      this.slideOpts ={
-        spaceBetween: 2,
-        slidesPerView: 2,
-        duration: 500
-      };
-      this.isSmallSizeScreen = true;
-    }else if (this.platform.width() < 1300 && this.platform.width() > 1200) {
-      this.slideOpts ={
-        spaceBetween: 2,
-        slidesPerView: 1,
-        duration: 500
-      };
-      this.isSmallSizeScreen = false;
-    }else if (this.platform.width() < 1200) {
-      this.slideOpts = {
-        spaceBetween: 1,
-        slidesPerView: 3.2,
-        duration: 500
-      };
-      this.isSmallSizeScreen = true;
-    }else {
-      this.isSmallSizeScreen = false;
-      this.slideOpts = {
-        spaceBetween: 2,
-        slidesPerView: 1.5,
-        duration: 500
-      };
-    }
+  ngOnInit() {
+    
   }
 
-  sliderClickEventTrigger(modelValue: any) {
-    this.sliderEventTrigger.emit(modelValue);
-  }
 
 }

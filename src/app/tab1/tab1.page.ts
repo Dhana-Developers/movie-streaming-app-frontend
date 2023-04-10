@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IonInfiniteScroll, SegmentChangeEventDetail, SegmentCustomEvent } from '@ionic/angular';
+import { IonInfiniteScroll, SearchbarCustomEvent, SegmentChangeEventDetail, SegmentCustomEvent } from '@ionic/angular';
 import { forkJoin, Observable } from 'rxjs';
 import { ThemoviedbService } from '../projects/api/service/themoviedb.service';
 import { show, hide } from '../store/loading/Loading.Actions';
@@ -18,7 +18,7 @@ export class Tab1Page implements OnInit{
   user: any;
 
   modelType = 'movie';
-  sliderContainer:any = [];
+  // sliderContainer:any = [];
   genreContainer:any = [];
   popularContainer:any = [];
   selectedGenre: any;
@@ -30,6 +30,9 @@ export class Tab1Page implements OnInit{
   isGenreSelected: boolean = false;
   loginState!: LoginState;
   bgImage: string = '/assets/icon/favicon.png';
+
+  itemTextField = 'title';
+  searchResult:any = [];
 
   constructor(private service: ThemoviedbService,
     private store: Store<AppState>,
@@ -43,7 +46,7 @@ export class Tab1Page implements OnInit{
   
 
   async ngOnInit() {
-    this.initializeSliderContainer();
+    // this.initializeSliderContainer();
     this.initializeGenreContainer();
     this.initializeContainer();
     this.store.dispatch(hide());
@@ -56,24 +59,24 @@ export class Tab1Page implements OnInit{
   }
   
 
-  initializeSliderContainer() {
-    this.service.getTrendingList(this.modelType).subscribe(trendingMoviesE1 => {
-      //console.log(trendingMoviesE1);
-      trendingMoviesE1.results.forEach((trendingMovie: any) => {
-        this.sliderContainer.push({
-          id: trendingMovie.id,
-          title: trendingMovie.title,
-          image: ('http://image.tmdb.org/t/p/original/' + trendingMovie.backdrop_path),
-          poster: ('http://image.tmdb.org/t/p/original/' + trendingMovie.poster_path),
-          modelItem: trendingMovie
+  // initializeSliderContainer() {
+  //   this.service.getTrendingList(this.modelType).subscribe(trendingMoviesE1 => {
+  //     //console.log(trendingMoviesE1);
+  //     trendingMoviesE1.results.forEach((trendingMovie: any) => {
+  //       this.sliderContainer.push({
+  //         id: trendingMovie.id,
+  //         title: trendingMovie.title,
+  //         image: ('http://image.tmdb.org/t/p/original/' + trendingMovie.backdrop_path),
+  //         poster: ('http://image.tmdb.org/t/p/original/' + trendingMovie.poster_path),
+  //         modelItem: trendingMovie
           
-        });
+  //       });
         
         
-      });
-      console.log(this.sliderContainer[0].image);
-    });
-  }
+  //     });
+  //     console.log(this.sliderContainer[0].image);
+  //   });
+  // }
 
   initializeGenreContainer() {
     this.service.genreList().subscribe(genreE1 => {
@@ -186,5 +189,19 @@ export class Tab1Page implements OnInit{
       });
       this.isLoading = false;
     });
+  }
+
+  leaf = (obj: any) => 
+    this.itemTextField.split('.').reduce((value, el) => value[el], obj);
+
+  filter(event: SearchbarCustomEvent) {
+    const filter = event.detail.value?.toLocaleLowerCase();
+    console.log(filter);
+    if (filter === '') {
+      this.searchResult = [];
+    }
+    
+    this.searchResult = this.popularContainer.filter((item: any) => 
+     this.leaf(item).toLowerCase().indexOf(filter) >=0);
   }
 }

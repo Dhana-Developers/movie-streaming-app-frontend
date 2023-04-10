@@ -29,10 +29,16 @@ export class ThemoviedbService {
   }
 
 
-  getTrendingList(type: string): Observable<any> {
+  getTrendingMov(type: string): Observable<any> {
     const requestUrl = `https://api.themoviedb.org/3/trending/${type}/day?api_key=${apiKey}&language=en-US`;
     return this.http.get(requestUrl);
   }
+
+  getTrendingTv(type: string): Observable<any> {
+    const requestUrl = `https://api.themoviedb.org/3/trending/${type}/day?api_key=${apiKey}&language=en-US`;
+    return this.http.get(requestUrl);
+  }
+
 
 
   getPopularList(type: string, page: number, genres: string): Observable<any> {
@@ -120,12 +126,15 @@ export class ThemoviedbService {
     return this.http.get(requestUrl);
   }
 
-  addSub(info: any): Observable<any> {
-    const requestUrl = `${baseUrl}/api/addsub/`;
+  addSubPaypal(info: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/addsub/paypal/`;
     return this.http.post(requestUrl, info);
   }
 
-  
+  addSubMpesa(info: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/addsub/mpesa/`;
+    return this.http.post(requestUrl, info);
+  }
 
   getSubs(): Observable<any> {
     const requestUrl = `${baseUrl}/api/subs/`;
