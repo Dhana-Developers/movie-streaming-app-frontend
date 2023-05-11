@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ContentChild, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -10,7 +10,7 @@ import { hide, show } from 'src/app/store/loading/Loading.Actions';
 import { LoginState } from 'src/app/store/login/LoginState';
 import { AuthService } from 'src/app/projects/api/service/authservice.service';
 import { User } from 'src/app/model/user/User';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, IonInput, ToastController } from '@ionic/angular';
 import { StorageService } from 'src/app/projects/api/service/storage.service';
 
 @Component({
@@ -22,6 +22,8 @@ export class LoginPage implements OnInit, OnDestroy {
   form!: any;
   loginStateSubscription!: Subscription;
   loginSate!: boolean;
+  showPassword!: boolean;
+  input: any;
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
@@ -34,6 +36,8 @@ export class LoginPage implements OnInit, OnDestroy {
    }
 
   async ngOnInit() {
+    this.showPassword = false;
+    this.input = 'password';
     this.form = new LoginPageForm(this.formBuilder).createForm()
     //this.store.dispatch(logIn())
     await this.storage.get('isLoggedIn').then(value => {
@@ -179,5 +183,14 @@ export class LoginPage implements OnInit, OnDestroy {
 
   register() {
     this.router.navigate(['register']);
+  }
+
+  resetPass() {
+    this.auth.passResetModal()
+  }
+
+  toggleShow() {
+    this.showPassword = !this.showPassword;
+    this.input = this.showPassword ? 'text' : 'password';
   }
 }

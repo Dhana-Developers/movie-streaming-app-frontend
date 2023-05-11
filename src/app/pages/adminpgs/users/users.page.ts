@@ -18,7 +18,7 @@ export class UsersPage implements OnInit {
 
   allUsers() {
     this.service.getUsers().subscribe(resp =>{
-      // console.log(resp.resp);
+      console.log(resp.resp);
       
       this.usersContainer = resp.resp.users;
     })

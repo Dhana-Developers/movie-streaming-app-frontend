@@ -1,13 +1,15 @@
 import { CdkStepper } from '@angular/cdk/stepper';
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { Route, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { concat } from 'rxjs';
 import { OnApprove, PayPalProcessor } from 'src/app/paypal/paypal.component';
 import { OnApproveActions, OnApproveData, OnCancelData, OnErrorData } from 'src/app/paypal/types/buttons';
 import { OrderRequest } from 'src/app/paypal/types/order';
 import { StorageService } from '../../api/service/storage.service';
 import { ThemoviedbService } from '../../api/service/themoviedb.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MpesaPageForm } from './mpesa.form';
 
 @Component({
   selector: 'app-subscriptionpaypal',
@@ -24,6 +26,7 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
   mpesaContact!: string;
   error!: string;
   loading: boolean = false;
+  form!: any;
 
   plans: any = [
     {
@@ -55,7 +58,10 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
   constructor(private storage: StorageService,
     private service: ThemoviedbService,
     private router: Router,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController,
+    private formBuilder: FormBuilder) { 
+      this.form = FormGroup;
+    }
 
   ngOnInit() {
     this.storage.get('user').then(resp => {
@@ -63,7 +69,7 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
       
       this.user = resp;
     });
-
+    this.form = new MpesaPageForm(this.formBuilder).createForm();
     
   }
 
@@ -233,8 +239,9 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
     let trans = {
       userid: this.user.id,
       plan: this.selectedPlan,
-      payerContact: this.mpesaContact
+      payerContact: '254'.concat(this.form.get('phoneNumber').value.slice(1))
     }
+    console.log(trans);
     
     const prompt = await this.toastCtrl.create({
       message: 'processing transaction check prompt on your phone',
@@ -251,11 +258,26 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
     });
 
     const toastError = await this.toastCtrl.create({
-      message: this.error,
+      message: 'an error occured please try again',
       duration: 2000,
       position: 'middle',
       color: 'danger'
     });
+
+    const toastCancel = await this.toastCtrl.create({
+      message: 'transaction cancelled',
+      duration: 2000,
+      position: 'middle',
+      color: 'danger'
+    });
+
+    const toastTimeout = await this.toastCtrl.create({
+      message: 'transaction timed out please try again',
+      duration: 2000,
+      position: 'middle',
+      color: 'danger'
+    });
+
     prompt.present();
     await this.service.addSubMpesa(trans).subscribe(resp =>{
       
@@ -268,12 +290,17 @@ export class SubscriptionpaypalComponent implements OnInit, OnApprove {
         window.location.reload();
         // this.router.navigate(['tabs', 'popular']);
       } else if (resp.code === 1) {
-        this.error = String(resp.error);
-        console.log(this.error);
-        (this.error);
         this.loading = false;
         toastError.present();
-
+      } else if (resp.code === 32) {
+        this.loading = false;
+        toastCancel.present();
+      } else if (resp.code === 37) {
+        this.loading = false;
+        toastTimeout.present();
+      } else if (resp.code === 25) {
+        this.loading = false;
+        toastError.present();
       }
     })
   }

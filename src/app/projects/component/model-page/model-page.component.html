@@ -34,6 +34,21 @@
           <ion-button color="secondary" (click)="playVideo()" *ngIf="!isPremium || subscribed"><ion-icon style="font-size: 40px;" name="play-circle-outline" ></ion-icon>
           </ion-button>
           <ion-button color="secondary" (click)="subscribe()" *ngIf="isPremium && !subscribed">Subscribe to Play Premium Movies</ion-button>
+          <ion-button id="click-trigger" color="primary" *ngIf="isPremium && !subscribed">how to go premium?</ion-button>
+          <ion-popover trigger="click-trigger" triggerAction="click">
+            <ng-template>
+              <ion-list class="ion-padding">
+                <ol>
+                  <li>click the subscribe button</li>
+                  <li>view advanced features</li>
+                  <li>select plan</li>
+                  <li>select payment method</li>
+                  <li>complete transaction</li>
+                  <li>Done</li>
+                </ol>
+              </ion-list>
+            </ng-template>
+          </ion-popover>
         </ion-buttons>
       </ion-toolbar>
     </div>

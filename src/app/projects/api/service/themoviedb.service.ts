@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ModelPageComponent } from '../../component/model-page/model-page.component';
 
 const apiKey = environment.apiKey;
-const baseUrl = 'http://localhost:8000';
+const baseUrl = 'https://movies.dhanatechnology.com';
 
 
 

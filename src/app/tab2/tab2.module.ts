@@ -15,6 +15,7 @@ import { NgxPayPalModule } from 'ngx-paypal';
         IonicModule,
         CommonModule,
         FormsModule,
+        
         ExploreContainerComponentModule,
         Tab2PageRoutingModule,
         // NgxPayPalModule,

@@ -2,8 +2,11 @@ import { APP_ID, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/model/user/User';
+import { ModalController } from '@ionic/angular';
+import { PasswordresetComponent } from '../../component/passwordreset/passwordreset.component';
+import { Router } from '@angular/router';
 
-const baseUrl = 'http://localhost:8000';
+const baseUrl = 'https://movies.dhanatechnology.com';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,9 @@ const baseUrl = 'http://localhost:8000';
 export class AuthService {
   user = new User();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private modalController: ModalController,
+    private router: Router) { }
 
   // getLogin(user: any): Observable<any> {
   //   const requestUrl = `${baseUrl}/api/signin/`;
@@ -70,5 +75,29 @@ export class AuthService {
   getUsers(): Observable<any> {
     const requestUrl = `${baseUrl}/api/users/`;
     return this.http.get(requestUrl);
+  }
+
+  resetPass(info: any): Observable<any> {
+    const requestUrl = `${baseUrl}/api/users/passreset/`;
+    return this.http.post(requestUrl, info);
+  }
+
+  async passResetModal() {
+    const modal = await this.modalController.create({
+      component: PasswordresetComponent,
+      cssClass: 'movie-modal',
+    });
+
+    return await modal.present();
+
+    // const { data, role } = await modal.onWillDismiss();
+
+    // if (role === 'close') {
+    //   this.router.navigate(['login']);
+    // }
+  }
+
+  dismissModel() {
+    this.modalController.dismiss();
   }
 }

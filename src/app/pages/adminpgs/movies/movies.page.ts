@@ -11,7 +11,7 @@ export class MoviesPage implements OnInit {
 
   movieContainer:any = [];
   searchResult:any = [];
-  itemTextField = 'title';
+  selectedFieldValue: any;
   itemTextField1 = 'release_date';
   queryParamTitle:boolean = false;
   queryParamDate:boolean = true;
@@ -29,7 +29,7 @@ export class MoviesPage implements OnInit {
   }
 
   leaf = (obj: any) => 
-    this.itemTextField.split('.').reduce((value, el) => value[el], obj) ;
+    this.selectedFieldValue.split('.').reduce((value: any, el: any) => value[el], obj);
 
   leaf1 = (obj: any) =>
     this.itemTextField1.split('.').reduce((value, el) => value[el], obj) ;
@@ -41,12 +41,17 @@ export class MoviesPage implements OnInit {
     if (filter === '') {
       this.searchResult = [];
     }
-    if (this.queryParamTitle) {
+    // if (this.queryParamTitle) {
       this.searchResult = this.movieContainer.filter((item: any) => 
       this.leaf(item).toLowerCase().indexOf(filter) >=0);
-    } else if (this.queryParamDate){
-      this.searchResult = this.movieContainer.filter((item: any) => 
-      this.leaf1(item).toLowerCase().indexOf(filter) >=0);
-    }
+    // } else if (this.queryParamDate){
+      // this.searchResult = this.movieContainer.filter((item: any) => 
+      // this.leaf1(item).toLowerCase().indexOf(filter) >=0);
+    // }
+  }
+
+  fieldSelectionChanged(fieldEvent: any) {
+    const field = fieldEvent.detail.value;
+    this.selectedFieldValue = field;
   }
 }

@@ -19,7 +19,7 @@
     </ion-card>
     <ion-card *ngIf="progress === 0.50">
       <ion-card-content>
-        <ion-title>Select plan</ion-title>
+        <h1>Select plan</h1>
         <ion-list *ngFor="let plan of plans">
             <!-- <ion-button fill="clear" size="full" (click)="selectPlan(plan)">
               <h1 slot="start">${{plan.amount}}</h1>
@@ -34,7 +34,8 @@
       </ion-card-content>  
     </ion-card>
     <ion-card *ngIf="progress === 0.75"> 
-      <h1>Selected Plan</h1>
+      <ion-card-content>
+      <h2>Selected Plan</h2>
       <ion-item>
         <ion-label>{{selectedPlan.name}}</ion-label>
         <ion-label>${{selectedPlan.amount}}</ion-label>
@@ -43,12 +44,19 @@
       <ion-item button (click)="selectMpesa()">Mpesa</ion-item>
       <ion-item button (click)="selectPaypal()">Paypal</ion-item>
       <!-- <ion-item button (click)="selectIntasend()">Intasend</ion-item> -->
+      </ion-card-content>
     </ion-card>
     <ion-card *ngIf="mpesa === true && progress === 0.85">
       <h1>Lipa na Mpesa</h1>
-      <ion-label>Enter mpesa number</ion-label>
-      <ion-input [(ngModel)]="mpesaContact" placeholder="254712345678" type="text"></ion-input>
-      <ion-button (click)="payMpesa()">Pay</ion-button>
+      <form [formGroup]="form">
+        <ion-label>Enter mpesa number</ion-label>
+        <ion-input fill="light" formControlName="phoneNumber" placeholder="0712345678" type="text" [maxlength]="10"></ion-input>
+
+        <ion-note color="danger" *ngIf="(form.get('phoneNumber').touched && form.get('phoneNumber').errors?.required)">Phone number required</ion-note>
+        <ion-label color="danger" *ngIf="(form.get('phoneNumber').touched && form.get('phoneNumber').errors?.pattern)">Invalid number</ion-label>
+        <ion-button (click)="payMpesa()" [disabled]="!form.valid">Pay</ion-button>
+      </form>
+      
       <!-- <iframe
         src="https://buy.moonpay.com/?apiKey=[your_api_key]"
         allow="accelerometer; autoplay; camera; gyroscope; payment"

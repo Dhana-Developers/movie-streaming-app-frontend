@@ -23,6 +23,7 @@ export class Tab1Page implements OnInit{
   popularContainer:any = [];
   selectedGenre: any;
   selectedGenreValue: any;
+  
   filteredGenreId: any;
   loadingCurrentEventData: boolean = false;
   isLoading: boolean = false;
@@ -141,7 +142,7 @@ export class Tab1Page implements OnInit{
           });
         });
       });
-      this.initializePopularContainer();
+      // this.initializePopularContainer();
     }
   }
 
